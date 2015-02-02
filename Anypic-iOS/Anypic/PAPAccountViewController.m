@@ -8,7 +8,6 @@
 
 #import "PAPAccountViewController.h"
 #import "PAPPhotoCell.h"
-#import "PAPUtility.h"
 #import "TTTTimeIntervalFormatter.h"
 #import "PAPLoadMoreCell.h"
 #import "UIImage+ImageEffects.h"
