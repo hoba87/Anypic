@@ -7,10 +7,12 @@
 //
 
 #import "PAPPhotoTimelineViewController.h"
-
-@interface PAPAccountViewController : PAPPhotoTimelineViewController
+#import "VPImageCropperViewController.h"
+@interface PAPAccountViewController : PAPPhotoTimelineViewController <UIActionSheetDelegate, UIImagePickerControllerDelegate, VPImageCropperDelegate, UIGestureRecognizerDelegate> {
+}
 
 @property (nonatomic, strong) PFUser *user;
+@property (nonatomic, readonly) UICollectionReusableView *header;
 
 - (id)initWithUser:(PFUser *)aUser;
 

@@ -68,8 +68,8 @@
                             }
                         }
                     }
-                    
-                    [[PAPCache sharedCache] setAttributesForPhoto:photo likers:likers commenters:commenters likedByCurrentUser:isLikedByCurrentUser];
+                    NSString *authorName = [[[objects firstObject] objectForKey:@"photo"] objectForKey:@"user"];
+                    [[PAPCache sharedCache] setAttributesForPhoto:photo authorName:authorName likers:likers commenters:commenters likedByCurrentUser:isLikedByCurrentUser];
                 }
 
                 [[NSNotificationCenter defaultCenter] postNotificationName:PAPUtilityUserLikedUnlikedPhotoCallbackFinishedNotification object:photo userInfo:[NSDictionary dictionaryWithObject:[NSNumber numberWithBool:succeeded] forKey:PAPPhotoDetailsViewControllerUserLikedUnlikedPhotoNotificationUserInfoLikedKey]];
@@ -119,8 +119,9 @@
                             }
                         }
                     }
-                    
-                    [[PAPCache sharedCache] setAttributesForPhoto:photo likers:likers commenters:commenters likedByCurrentUser:isLikedByCurrentUser];
+                    NSString *authorName = [[[objects firstObject] objectForKey:@"photo"] objectForKey:@"user"];
+
+                    [[PAPCache sharedCache] setAttributesForPhoto:photo authorName:authorName likers:likers commenters:commenters likedByCurrentUser:isLikedByCurrentUser];
                 }
                 
                 [[NSNotificationCenter defaultCenter] postNotificationName:PAPUtilityUserLikedUnlikedPhotoCallbackFinishedNotification object:photo userInfo:[NSDictionary dictionaryWithObject:[NSNumber numberWithBool:NO] forKey:PAPPhotoDetailsViewControllerUserLikedUnlikedPhotoNotificationUserInfoLikedKey]];
@@ -173,12 +174,12 @@
   NSLog(@"Processed profile picture");
 }
 
-+ (BOOL)userHasValidFacebookData:(PFUser *)user {
-    // Check that PFUser has valid fbid that matches current FBSessions userId
-    NSString *facebookId = [user objectForKey:kPAPUserFacebookIDKey];
-    return (facebookId && facebookId.length > 0 && [facebookId isEqualToString:[[[PFFacebookUtils session] accessTokenData] userID]]);
-}
-
+//+ (BOOL)userHasValidFacebookData:(PFUser *)user {
+//    // Check that PFUser has valid fbid that matches current FBSessions userId
+//    NSString *facebookId = [user objectForKey:kPAPUserFacebookIDKey];
+//    return (facebookId && facebookId.length > 0 && [facebookId isEqualToString:[[[PFFacebookUtils session] accessTokenData] userID]]);
+//}
+//
 + (BOOL)userHasProfilePictures:(PFUser *)user {
     PFFile *profilePictureMedium = [user objectForKey:kPAPUserProfilePicMediumKey];
     PFFile *profilePictureSmall = [user objectForKey:kPAPUserProfilePicSmallKey];
