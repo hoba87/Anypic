@@ -120,7 +120,7 @@ typedef enum {
     PFQuery *query = [PFQuery queryWithClassName: @"_User"];
     [query whereKeyExists:kPAPUserDisplayNameKey];  //this is based on whatever query you are trying to accomplish
     [query whereKey:kPAPUserDisplayNameKey containsString:searchTerm];
-    query.limit = 10;
+    query.limit = 50;
     
     [query findObjectsInBackgroundWithTarget:self selector:@selector(callbackWithResult:error:)];
     
