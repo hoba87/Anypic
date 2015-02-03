@@ -223,12 +223,12 @@ static TTTTimeIntervalFormatter *timeFormatter;
     /*
      Create middle section of the header view; the image
      */
-    self.photoImageView = [[PFImageView alloc] initWithFrame:CGRectMake(mainImageX, mainImageY, mainImageWidth, mainImageHeight)];
+//    self.photoImageView = [[PFImageView alloc] initWithFrame:CGRectMake(mainImageX, mainImageY, mainImageWidth, mainImageHeight)];
     CGRect frame = CGRectMake(mainImageX, mainImageY, mainImageWidth, mainImageHeight);
 //    DDimensivaMPODataSource *datasource = [DDimensivaMPODataSource sharedInstance];
 //    self.mpoViewController = [[DMPOViewController alloc] initWithDataSource:datasource AndIndex:1];
-    self.photoImageView.image = [UIImage imageNamed:@"PlaceholderPhoto.png"];
-//    self.photoImageView.contentMode = UIViewContentModeScaleAspectFit;
+////    self.photoImageView.image = [UIImage imageNamed:@"PlaceholderPhoto.png"];
+    
         NSNumber *viewOption3DView = [[NSUserDefaults standardUserDefaults] objectForKey:kViewOption3DView];
 //        if (mpoImage3DViewOption != viewOption3DView.integerValue) {
             if (self.mpoImageView != nil) {
@@ -279,11 +279,11 @@ static TTTTimeIntervalFormatter *timeFormatter;
     
 //        [[NSNotificationCenter defaultCenter] postNotificationName:kAirplayNotificationImageChanged object:self userInfo:[NSDictionary dictionaryWithObject:mpoImage forKey:@"MPOImage"]];
 
-    PFFile *imageFile = [self.photo objectForKey:kPAPPhotoPictureKey];
-    if (imageFile) {
-        self.photoImageView.file = imageFile;
-        [self.photoImageView loadInBackground];
-    }
+//    PFFile *imageFile = [self.photo objectForKey:kPAPPhotoPictureKey];
+//    if (imageFile) {
+//        self.photoImageView.file = imageFile;
+//        [self.photoImageView loadInBackground];
+//    }
     
 //    [self addSubview:self.photoImageView];
     
@@ -309,7 +309,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
         [avatarImageView setOpaque:NO];
         [avatarImageView.profileButton addTarget:self action:@selector(didTapUserNameButtonAction:) forControlEvents:UIControlEventTouchUpInside];
         [avatarImageView setContentMode:UIViewContentModeScaleAspectFill];
-        avatarImageView.layer.cornerRadius = 66.0f;
+        avatarImageView.layer.cornerRadius = 17.5f;
         avatarImageView.layer.masksToBounds = YES;
         //[avatarImageView load:^(UIImage *image, NSError *error) {}];
         [nameHeaderView addSubview:avatarImageView];

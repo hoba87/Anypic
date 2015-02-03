@@ -16,6 +16,12 @@
 #import "PAPUtility.h"
 #import "MBProgressHUD.h"
 #import "DAppDelegate.h"
+#import "DActivityItem.h"
+#import "DMailActivity.h"
+#import "DDropboxActivity.h"
+#import "DActivityItemProvider.h"
+#import "UIImage+ImageEffects.h"
+
 
 enum ActionSheetTags {
     MainActionSheetTag = 0,
@@ -72,12 +78,31 @@ static const CGFloat kPAPCellInsetWidth = 0.0f;
 
     [super viewDidLoad];
     
-    self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"LogoNavigationBar.png"]];
+//    self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"LogoNavigationBar.png"]];
     
     // Set table view properties
     UIView *texturedBackgroundView = [[UIView alloc] initWithFrame:self.view.bounds];
     self.tableView.backgroundColor = [UIColor dimensivaBackgroundColor];
     self.tableView.backgroundView = texturedBackgroundView;
+    
+//    [photo fetchIfNeededInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+//        PFFile *image = photo[@"picture"];
+//        [image getDataInBackgroundWithBlock:^(NSData *imageData, NSError *error) {
+//            if (!error) {
+//                MPOImage *mpoImage = [[MPOImage alloc] initWithMPOData:imageData];
+//                UIImageView *backgroundImageView = [[UIImageView alloc] initWithImage:[[mpoImage getUIImageAtIndex:0] applyDarkEffect]];
+//                backgroundImageView.frame = self.tableView.backgroundView.bounds;
+//                backgroundImageView.alpha = 0.0f;
+//                [self.tableView.backgroundView addSubview:backgroundImageView];
+//                [UIView animateWithDuration:0.2f animations:^{
+//                    backgroundImageView.alpha = 1.0f;
+//                }];
+//            }
+//        }];
+//    }];
+    
+    
+
     
     // Set table header
     self.headerView = [[PAPPhotoDetailsHeaderView alloc] initWithFrame:[PAPPhotoDetailsHeaderView rectForView] photo:self.photo];
@@ -91,7 +116,10 @@ static const CGFloat kPAPCellInsetWidth = 0.0f;
     commentTextField.delegate = self;
     self.tableView.tableFooterView = footerView;
 
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(activityButtonAction:)];
+//    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionButtonAction:)];//activityButtonAction:)];
+    if ([[[self.photo objectForKey:kPAPPhotoUserKey] objectId] isEqualToString:[[PFUser currentUser] objectId]]) {
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionButtonAction:)];
+    }
     
     // Register to be notified when the keyboard will be shown to scroll the view
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
@@ -291,9 +319,10 @@ static const CGFloat kPAPCellInsetWidth = 0.0f;
     actionSheet.delegate = self;
     actionSheet.tag = MainActionSheetTag;
     actionSheet.destructiveButtonIndex = [actionSheet addButtonWithTitle:NSLocalizedString(@"Delete Photo", nil)];
-    if (NSClassFromString(@"UIActivityViewController")) {
-        [actionSheet addButtonWithTitle:NSLocalizedString(@"Share Photo", nil)];
-    }
+#warning todo
+//    if (NSClassFromString(@"UIActivityViewController")) {
+//        [actionSheet addButtonWithTitle:NSLocalizedString(@"Share Photo", nil)];
+//    }
     actionSheet.cancelButtonIndex = [actionSheet addButtonWithTitle:NSLocalizedString(@"Cancel", nil)];
     [actionSheet showFromTabBar:self.tabBarController.tabBar];
 }
@@ -318,25 +347,39 @@ static const CGFloat kPAPCellInsetWidth = 0.0f;
 - (void)showShareSheet {
     [[self.photo objectForKey:kPAPPhotoPictureKey] getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
         if (!error) {
-            NSMutableArray *activityItems = [NSMutableArray arrayWithCapacity:3];
-                        
-            // Prefill caption if this is the original poster of the photo, and then only if they added a caption initially.
-            if ([[[PFUser currentUser] objectId] isEqualToString:[[self.photo objectForKey:kPAPPhotoUserKey] objectId]] && [self.objects count] > 0) {
-                PFObject *firstActivity = self.objects[0];
-                if ([[[firstActivity objectForKey:kPAPActivityFromUserKey] objectId] isEqualToString:[[self.photo objectForKey:kPAPPhotoUserKey] objectId]]) {
-                    NSString *commentString = [firstActivity objectForKey:kPAPActivityContentKey];
-                    [activityItems addObject:commentString];
-                }
-            }
             
-            [activityItems addObject:[UIImage imageWithData:data]];
-            [activityItems addObject:[NSURL URLWithString:[NSString stringWithFormat:@"https://anypic.org/#pic/%@", self.photo.objectId]]];
+            NSMutableArray *activityItems = [NSMutableArray array];
+            NSMutableArray *activities = [NSMutableArray array];
             
-            UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:activityItems applicationActivities:nil];
-            [self.navigationController presentViewController:activityViewController animated:YES completion:nil];
+            DActivityItem *activityItem = [[DActivityItem alloc] initWithMPOImage:[[MPOImage alloc] initWithMPOData:data]];
+            [activityItems addObject:activityItem];
+            
+            DDropboxActivity *dropboxActivity = [[DDropboxActivity alloc] init];
+            [activities addObject:dropboxActivity];
+            DMailActivity *mailActivityMPO = [[DMailActivity alloc] initWithFileFormat:kFileFormatMPO];
+            [activities addObject:mailActivityMPO];
+            DMailActivity *mailActivityJPS = [[DMailActivity alloc] initWithFileFormat:kFileFormatJPS];
+            [activities addObject:mailActivityJPS];
+            
+                NSString *shareString = @"Check out this Dimensiva photo!";
+                [activityItems addObject:shareString];
+                
+                // Wenn Foto per Nachricht verschickt wird, erst bei Bedarf Side-by-Side-Ansicht erzeugen:
+                DActivityItemProvider *activityItemProvider = [[DActivityItemProvider alloc] initWithMPOImage:[[MPOImage alloc] initWithMPOData:data]];
+                [activityItems addObject:activityItemProvider];
+                
+                UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:activityItems applicationActivities:activities];
+                activityViewController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
+                activityViewController.excludedActivityTypes = @[UIActivityTypePrint,
+                                                                 UIActivityTypeAssignToContact,
+                                                                 UIActivityTypeSaveToCameraRoll,
+                                                                 UIActivityTypeMail,
+                                                                 UIActivityTypeCopyToPasteboard];
+                [self presentViewController:activityViewController animated:YES completion:nil];
         }
     }];
 }
+
 
 - (void)handleCommentTimeout:(NSTimer *)aTimer {
     [MBProgressHUD hideHUDForView:self.view.superview animated:YES];
@@ -431,5 +474,41 @@ static const CGFloat kPAPCellInsetWidth = 0.0f;
     [[NSNotificationCenter defaultCenter] postNotificationName:PAPPhotoDetailsViewControllerUserDeletedPhotoNotification object:[self.photo objectId]];
     [self.navigationController popViewControllerAnimated:YES];
 }
+
+- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+{
+    if UIInterfaceOrientationIsPortrait([[UIApplication sharedApplication] statusBarOrientation]) {
+        [self toggleFullScreen];
+        [self.tableView setContentOffset:
+         CGPointMake(0, self.tableView.contentOffset.y+46.f) animated:YES];
+       
+        self.tableView.scrollEnabled = NO;
+        
+    } else {
+        [self toggleFullScreen];
+        [self.tableView setContentOffset:
+         CGPointMake(0, -self.tableView.contentInset.top) animated:YES];
+        
+        self.tableView.scrollEnabled = YES;
+    }
+}
+- (void)toggleFullScreen
+{
+    if (self.navigationController.navigationBarHidden == NO) {
+        self.navigationController.navigationBarHidden = YES;
+        self.navigationController.toolbarHidden = YES;
+        [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationFade];
+    }
+    else {
+        [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationFade];
+        self.navigationController.navigationBarHidden = NO;
+        self.navigationController.toolbarHidden = NO;
+    }
+    
+    if ([self respondsToSelector:@selector(setNeedsStatusBarAppearanceUpdate)]) {
+        [self setNeedsStatusBarAppearanceUpdate];
+    }
+}
+
 
 @end

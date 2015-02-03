@@ -136,15 +136,16 @@
     
     NSDictionary *attributesForPhoto = [[PAPCache sharedCache] attributesForPhoto:object];
     if (attributesForPhoto) {
-#warning todo
         //                    [headerView setLikeStatus:[[PAPCache sharedCache] isPhotoLikedByCurrentUser:photo]];
         [cell setLikeCount:[[[PAPCache sharedCache] likeCountForPhoto:object] description]];
         [cell setCommentCount:[[[PAPCache sharedCache] commentCountForPhoto:object] description]];
         [cell setCaption:[[PAPCache sharedCache] authorNameForPhoto:object]];
     } else {
-        cell.likeButton.alpha = 0.0f;
-        cell.commentButton.alpha = 0.0f;
+        cell.likeLabel.alpha = 0.0f;
+        cell.commentLabel.alpha = 0.0f;
         cell.captionLabel.alpha = 0.0f;
+        cell.commentLabelHelper.alpha = 0.0f;
+
         @synchronized(self) {
             // check if we can update the cache
             NSNumber *outstandingSectionHeaderQueryStatus = [self.outstandingSectionHeaderQueries objectForKey:[NSNumber numberWithInteger:indexPath.row]];
@@ -188,11 +189,12 @@
                             [cell setCommentCount:[[[PAPCache sharedCache] commentCountForPhoto:object] description]];
                             [cell setCaption:[[PAPCache sharedCache] authorNameForPhoto:object]];
                             
-                            if (cell.likeButton.alpha < 1.0f || cell.commentButton.alpha < 1.0f || cell.captionLabel.alpha < 1.0f) {
+                            if (cell.likeLabel.alpha < 1.0f || cell.commentLabel.alpha < 1.0f || cell.captionLabel.alpha < 1.0f) {
                                 [UIView animateWithDuration:0.200f animations:^{
-                                    cell.likeButton.alpha = 1.0f;
-                                    cell.commentButton.alpha = 1.0f;
+                                    cell.likeLabel.alpha = 0.7f;
+                                    cell.commentLabel.alpha = 0.7f;
                                     cell.captionLabel.alpha = 0.7f;
+                                    cell.commentLabelHelper.alpha = 0.7f;
                                 }];
                             }
 
@@ -264,6 +266,14 @@
     }
 }
 
-
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (UIInterfaceOrientationIsLandscape([[UIApplication sharedApplication] statusBarOrientation])) {
+        return CGSizeMake(170, 210);
+    }
+    else {
+        return CGSizeMake(155, 195);
+    }
+}
 
 @end

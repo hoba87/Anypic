@@ -172,7 +172,6 @@ static PAPHomeViewController *__sharedInstance = nil;
         }
     }
     -(void)timeline{
-        NSLog(@"empfangen");
         if (mpoDataSource.count == 0) {
             [self.view addSubview:self.blankTimelineView];
             self.blankTimelineView.alpha = 0.0f;
