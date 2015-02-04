@@ -32,7 +32,7 @@
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
-        self.backgroundColor = [UIColor blackColor];
+        self.backgroundColor = [UIColor clearColor];
         self.selectionStyle = UITableViewCellSelectionStyleNone;
 
         self.avatarImageView = [[PAPProfileImageView alloc] init];
@@ -69,11 +69,11 @@
         self.followButton = [UIButton buttonWithType:UIButtonTypeCustom];
         self.followButton.titleLabel.font = [UIFont boldSystemFontOfSize:15.0f];
         self.followButton.titleEdgeInsets = UIEdgeInsetsMake( 0.0f, 10.0f, 0.0f, 0.0f);
-        [self.followButton setBackgroundImage:[UIImage imageNamed:@"ButtonFollow.png"]
+        [self.followButton setBackgroundImage:[UIImage imageNamed:@"buttonFollow.png"]
                                      forState:UIControlStateNormal];
-        [self.followButton setBackgroundImage:[UIImage imageNamed:@"ButtonFollowing.png"]
+        [self.followButton setBackgroundImage:[UIImage imageNamed:@"buttonFollowing.png"]
                                      forState:UIControlStateSelected];
-        [self.followButton setImage:[UIImage imageNamed:@"IconTick.png"]
+        [self.followButton setImage:[UIImage imageNamed:@"iconTick.png"]
                            forState:UIControlStateSelected];
         [self.followButton setTitle:NSLocalizedString(@"Follow  ", @"Follow string, with spaces added for centering")
                            forState:UIControlStateNormal];

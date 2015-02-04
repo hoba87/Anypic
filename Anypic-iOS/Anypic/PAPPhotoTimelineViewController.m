@@ -191,10 +191,10 @@
                             
                             if (cell.likeLabel.alpha < 1.0f || cell.commentLabel.alpha < 1.0f || cell.captionLabel.alpha < 1.0f) {
                                 [UIView animateWithDuration:0.200f animations:^{
-                                    cell.likeLabel.alpha = 0.7f;
-                                    cell.commentLabel.alpha = 0.7f;
-                                    cell.captionLabel.alpha = 0.7f;
-                                    cell.commentLabelHelper.alpha = 0.7f;
+                                    cell.likeLabel.alpha = 0.6f;
+                                    cell.commentLabel.alpha = 0.6f;
+                                    cell.captionLabel.alpha = 0.6f;
+                                    cell.commentLabelHelper.alpha = 0.6f;
                                 }];
                             }
 

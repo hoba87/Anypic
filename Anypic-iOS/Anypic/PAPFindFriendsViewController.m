@@ -66,13 +66,13 @@ typedef enum {
     [super viewDidLoad];
 
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    self.tableView.backgroundColor = [UIColor blackColor];
+    self.tableView.backgroundColor = [UIColor dimensivaBackgroundColor];
 
 //    self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"TitleFindFriends.png"]];
 
     if ([MFMailComposeViewController canSendMail] || [MFMessageComposeViewController canSendText]) {
         self.headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 67)];
-        [self.headerView setBackgroundColor:[UIColor blackColor]];
+        [self.headerView setBackgroundColor:[UIColor dimensivaBackgroundColor]];
         UIButton *clearButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [clearButton setBackgroundColor:[UIColor clearColor]];
         [clearButton addTarget:self action:@selector(inviteFriendsButtonAction:) forControlEvents:UIControlEventTouchUpInside];
@@ -131,6 +131,10 @@ typedef enum {
     if(!error) {
         [self.searchResults removeAllObjects];
         [self.searchResults addObjectsFromArray:celebrities];
+//        for (PFUser *result in self.searchResults) {
+//            [result fetch];
+////            [[PAPCache sharedCache] setAttributesForUser:result photoCount:<#(NSNumber *)#> followedByCurrentUser:<#(BOOL)#>
+//        }
         [self.searchDisplayController.searchResultsTableView reloadData];
     }
 }
@@ -249,11 +253,11 @@ typedef enum {
         [cell setDelegate:self];
     }
 
-    if (![tableView isEqual:self.searchDisplayController.searchResultsTableView]) {
-        [cell setUser:(PFUser*)object];
-    } else {
-        [cell setUser:[self.searchResults objectAtIndex:indexPath.row]];//(PFUser*)object];
+    if ([tableView isEqual:self.searchDisplayController.searchResultsTableView]) {
+        object = [self.searchResults objectAtIndex:indexPath.row];//(PFUser*)object];
     }
+    
+    [cell setUser:(PFUser*)object];
     [cell.photoLabel setText:@"0 photos"];
 
     NSDictionary *attributes = [[PAPCache sharedCache] attributesForUser:(PFUser *)object];

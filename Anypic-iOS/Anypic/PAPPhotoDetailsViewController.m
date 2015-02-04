@@ -282,8 +282,8 @@ static const CGFloat kPAPCellInsetWidth = 0.0f;
             UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:NSLocalizedString(@"Are you sure you want to delete this photo?", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"Cancel", nil) destructiveButtonTitle:NSLocalizedString(@"Yes, delete photo", nil) otherButtonTitles:nil];
             actionSheet.tag = ConfirmDeleteActionSheetTag;
             [actionSheet showFromTabBar:self.tabBarController.tabBar];
-        } else {
-            [self activityButtonAction:actionSheet];
+//        } else {
+//            [self activityButtonAction:actionSheet];
         }
     } else if (actionSheet.tag == ConfirmDeleteActionSheetTag) {
         if ([actionSheet destructiveButtonIndex] == buttonIndex) {
@@ -326,59 +326,59 @@ static const CGFloat kPAPCellInsetWidth = 0.0f;
     actionSheet.cancelButtonIndex = [actionSheet addButtonWithTitle:NSLocalizedString(@"Cancel", nil)];
     [actionSheet showFromTabBar:self.tabBarController.tabBar];
 }
-
-- (void)activityButtonAction:(id)sender {
-    if ([[self.photo objectForKey:kPAPPhotoPictureKey] isDataAvailable]) {
-        [self showShareSheet];
-    } else {
-        [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-        [[self.photo objectForKey:kPAPPhotoPictureKey] getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
-            [MBProgressHUD hideHUDForView:self.view animated:YES];
-            if (!error) {
-                [self showShareSheet];
-            }
-        }];
-    }
-}
+//
+//- (void)activityButtonAction:(id)sender {
+//    if ([[self.photo objectForKey:kPAPPhotoPictureKey] isDataAvailable]) {
+//        [self showShareSheet];
+//    } else {
+//        [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+//        [[self.photo objectForKey:kPAPPhotoPictureKey] getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
+//            [MBProgressHUD hideHUDForView:self.view animated:YES];
+//            if (!error) {
+//                [self showShareSheet];
+//            }
+//        }];
+//    }
+//}
 
 
 #pragma mark - ()
 
-- (void)showShareSheet {
-    [[self.photo objectForKey:kPAPPhotoPictureKey] getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
-        if (!error) {
-            
-            NSMutableArray *activityItems = [NSMutableArray array];
-            NSMutableArray *activities = [NSMutableArray array];
-            
-            DActivityItem *activityItem = [[DActivityItem alloc] initWithMPOImage:[[MPOImage alloc] initWithMPOData:data]];
-            [activityItems addObject:activityItem];
-            
-            DDropboxActivity *dropboxActivity = [[DDropboxActivity alloc] init];
-            [activities addObject:dropboxActivity];
-            DMailActivity *mailActivityMPO = [[DMailActivity alloc] initWithFileFormat:kFileFormatMPO];
-            [activities addObject:mailActivityMPO];
-            DMailActivity *mailActivityJPS = [[DMailActivity alloc] initWithFileFormat:kFileFormatJPS];
-            [activities addObject:mailActivityJPS];
-            
-                NSString *shareString = @"Check out this Dimensiva photo!";
-                [activityItems addObject:shareString];
-                
-                // Wenn Foto per Nachricht verschickt wird, erst bei Bedarf Side-by-Side-Ansicht erzeugen:
-                DActivityItemProvider *activityItemProvider = [[DActivityItemProvider alloc] initWithMPOImage:[[MPOImage alloc] initWithMPOData:data]];
-                [activityItems addObject:activityItemProvider];
-                
-                UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:activityItems applicationActivities:activities];
-                activityViewController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
-                activityViewController.excludedActivityTypes = @[UIActivityTypePrint,
-                                                                 UIActivityTypeAssignToContact,
-                                                                 UIActivityTypeSaveToCameraRoll,
-                                                                 UIActivityTypeMail,
-                                                                 UIActivityTypeCopyToPasteboard];
-                [self presentViewController:activityViewController animated:YES completion:nil];
-        }
-    }];
-}
+//- (void)showShareSheet {
+//    [[self.photo objectForKey:kPAPPhotoPictureKey] getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
+//        if (!error) {
+//            
+//            NSMutableArray *activityItems = [NSMutableArray array];
+//            NSMutableArray *activities = [NSMutableArray array];
+//            
+//            DActivityItem *activityItem = [[DActivityItem alloc] initWithMPOImage:[[MPOImage alloc] initWithMPOData:data]];
+//            [activityItems addObject:activityItem];
+//            
+//            DDropboxActivity *dropboxActivity = [[DDropboxActivity alloc] init];
+//            [activities addObject:dropboxActivity];
+//            DMailActivity *mailActivityMPO = [[DMailActivity alloc] initWithFileFormat:kFileFormatMPO];
+//            [activities addObject:mailActivityMPO];
+//            DMailActivity *mailActivityJPS = [[DMailActivity alloc] initWithFileFormat:kFileFormatJPS];
+//            [activities addObject:mailActivityJPS];
+//            
+//                NSString *shareString = @"Check out this Dimensiva photo!";
+//                [activityItems addObject:shareString];
+//                
+//                // Wenn Foto per Nachricht verschickt wird, erst bei Bedarf Side-by-Side-Ansicht erzeugen:
+//                DActivityItemProvider *activityItemProvider = [[DActivityItemProvider alloc] initWithMPOImage:[[MPOImage alloc] initWithMPOData:data]];
+//                [activityItems addObject:activityItemProvider];
+//                
+//                UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:activityItems applicationActivities:activities];
+//                activityViewController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
+//                activityViewController.excludedActivityTypes = @[UIActivityTypePrint,
+//                                                                 UIActivityTypeAssignToContact,
+//                                                                 UIActivityTypeSaveToCameraRoll,
+//                                                                 UIActivityTypeMail,
+//                                                                 UIActivityTypeCopyToPasteboard];
+//                [self presentViewController:activityViewController animated:YES completion:nil];
+//        }
+//    }];
+//}
 
 
 - (void)handleCommentTimeout:(NSTimer *)aTimer {
@@ -467,9 +467,18 @@ static const CGFloat kPAPCellInsetWidth = 0.0f;
                 [activity deleteEventually];
             }
         }
-        
-        // Delete photo
-        [self.photo deleteEventually];
+        [self.photo fetchIfNeededInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+            PFObject *mpoFile = [PFObject objectWithClassName:@"MPOFileReported"];
+            mpoFile[@"picture"] = self.photo[@"picture"];
+            mpoFile[@"thumb"] = self.photo[@"thumb"];
+            mpoFile[@"user"] = self.photo[@"user"];
+            mpoFile[@"title"] = self.photo[@"title"];
+            mpoFile[@"reportedBy"] = [PFUser currentUser];
+            
+            [mpoFile saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                [self.photo deleteEventually];
+            }];
+        }];
     }];
     [[NSNotificationCenter defaultCenter] postNotificationName:PAPPhotoDetailsViewControllerUserDeletedPhotoNotification object:[self.photo objectId]];
     [self.navigationController popViewControllerAnimated:YES];

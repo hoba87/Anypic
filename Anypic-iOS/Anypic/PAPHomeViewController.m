@@ -296,7 +296,7 @@ static PAPHomeViewController *__sharedInstance = nil;
             [FBRequestConnection
              startForMeWithCompletionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
                  if (!error) {
-                     NSString *name = [result objectForKey:@"username"];
+                     NSString *name = [result objectForKey:@"name"];
                      NSString *facebookId = [result objectForKey:@"id"];
                      
                      PFQuery *query = [PFQuery queryWithClassName:@"_User"];

@@ -146,7 +146,7 @@ static NSString *LoadMoreCellIdentifier = @"LoadMoreCell";
     [profilePictureImageView addGestureRecognizer:tap];
     
     UIImageView *photoCountIconImageView = [[UIImageView alloc] initWithImage:nil];
-    [photoCountIconImageView setImage:[UIImage imageNamed:@"IconPics.png"]];
+    [photoCountIconImageView setImage:[UIImage imageNamed:@"iconPics.png"]];
     [photoCountIconImageView setFrame:CGRectMake( 26.0f, 50.0f, 45.0f, 37.0f)];
     [self.headerView addSubview:photoCountIconImageView];
     
@@ -160,7 +160,7 @@ static NSString *LoadMoreCellIdentifier = @"LoadMoreCell";
     [self.headerView addSubview:photoCountLabel];
     
     UIImageView *followersIconImageView = [[UIImageView alloc] initWithImage:nil];
-    [followersIconImageView setImage:[UIImage imageNamed:@"IconFollowers.png"]];
+    [followersIconImageView setImage:[UIImage imageNamed:@"iconFollowers.png"]];
     [followersIconImageView setFrame:CGRectMake( 247.0f, 50.0f, 52.0f, 37.0f)];
     [self.headerView addSubview:followersIconImageView];
     

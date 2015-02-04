@@ -50,9 +50,9 @@
 #define likeBarWidth baseWidth
 #define likeBarHeight 43.0f
 
-#define likeButtonX 9.0f
-#define likeButtonY 8.0f
-#define likeButtonDim 28.0f
+#define likeButtonX 0.0f
+#define likeButtonY 0.0f
+#define likeButtonDim 48.0f
 
 #define likeProfileXBase 46.0f
 #define likeProfileXSpace 3.0f
@@ -367,7 +367,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
     likeButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [likeButton setFrame:CGRectMake(likeButtonX, likeButtonY, likeButtonDim, likeButtonDim)];
     [likeButton setBackgroundColor:[UIColor clearColor]];
-    [likeButton setTitleColor:[UIColor colorWithRed:254.0f/255.0f green:149.0f/255.0f blue:50.0f/255.0f alpha:1.0f] forState:UIControlStateNormal];
+    [likeButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [likeButton setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
     [likeButton setTitleEdgeInsets:UIEdgeInsetsMake(0.0f, 0.0f, 0.0f, 0.0f)];
     [[likeButton titleLabel] setFont:[UIFont systemFontOfSize:12.0f]];
@@ -375,14 +375,14 @@ static TTTTimeIntervalFormatter *timeFormatter;
     [[likeButton titleLabel] setAdjustsFontSizeToFitWidth:YES];
     [likeButton setAdjustsImageWhenDisabled:NO];
     [likeButton setAdjustsImageWhenHighlighted:NO];
-    [likeButton setBackgroundImage:[UIImage imageNamed:@"ButtonLike.png"] forState:UIControlStateNormal];
-    [likeButton setBackgroundImage:[UIImage imageNamed:@"ButtonLikeSelected.png"] forState:UIControlStateSelected];
+    [likeButton setBackgroundImage:[UIImage imageNamed:@"buttonLike.png"] forState:UIControlStateNormal];
+    [likeButton setBackgroundImage:[UIImage imageNamed:@"buttonLikeSelected.png"] forState:UIControlStateSelected];
     [likeButton addTarget:self action:@selector(didTapLikePhotoButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [likeBarView addSubview:likeButton];
     
     [self reloadLikeBar];
     
-    UIImageView *separator = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"SeparatorComments.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0.0f, 1.0f, 0.0f, 1.0f)]];
+    UIImageView *separator = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"separatorComments.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0.0f, 1.0f, 0.0f, 1.0f)]];
     [separator setFrame:CGRectMake(0.0f, likeBarView.frame.size.height - 1.0f, likeBarView.frame.size.width, 1.0f)];
     //[likeBarView addSubview:separator];
 }

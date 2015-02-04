@@ -13,6 +13,7 @@
 + (id)sharedCache;
 
 - (void)clear;
+- (void)setAttributesForUser:(PFUser *)user photoCount:(NSNumber *)count followedByCurrentUser:(BOOL)following;
 - (void)setAttributesForPhoto:(PFObject *)photo authorName:(NSString *)authorName likers:(NSArray *)likers commenters:(NSArray *)commenters likedByCurrentUser:(BOOL)likedByCurrentUser;
 - (NSDictionary *)attributesForPhoto:(PFObject *)photo;
 - (NSNumber *)likeCountForPhoto:(PFObject *)photo;

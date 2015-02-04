@@ -32,11 +32,11 @@
         mainView.backgroundColor = [UIColor whiteColor];
         [self addSubview:mainView];
         
-        UIImageView *messageIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"IconAddComment.png"]];
-        messageIcon.frame = CGRectMake( 20.0f, 15.0f, 22.0f, 22.0f);
+        UIImageView *messageIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"iconAddComment.png"]];
+        messageIcon.frame = CGRectMake( 13.0f, 7.0f, 36.0f, 36.0f);
         [mainView addSubview:messageIcon];
         
-        UIImageView *commentBox = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"TextFieldComment.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(10.0f, 10.0f, 10.0f, 10.0f)]];
+        UIImageView *commentBox = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"textFieldComment.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(10.0f, 10.0f, 10.0f, 10.0f)]];
         commentBox.frame = CGRectMake(55.0f, 8.0f, 237.0f, 34.0f);
         [mainView addSubview:commentBox];
         

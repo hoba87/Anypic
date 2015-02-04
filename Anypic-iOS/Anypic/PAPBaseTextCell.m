@@ -108,7 +108,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
 
         [mainView addSubview:self.avatarImageButton];
         
-        self.separatorImage = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"SeparatorComments.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 1, 0, 1)]];
+        self.separatorImage = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"separatorComments.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 1, 0, 1)]];
         //[mainView addSubview:separatorImage];
         
         [self.contentView addSubview:mainView];
