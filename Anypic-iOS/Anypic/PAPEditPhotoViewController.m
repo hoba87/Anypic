@@ -123,7 +123,7 @@
     
     // JPEG to decrease file size and enable faster uploads & downloads
     NSData *imageData = [anImage MPOImageRepresentation];
-    NSData *thumbnailImageData = UIImageJPEGRepresentation([[anImage getUIImageAtIndex:0] resizedImageByMagick:@"310x310#"], 0.8);
+    NSData *thumbnailImageData = UIImageJPEGRepresentation([[anImage getUIImageAtIndex:0] resizedImageByMagick:@"400x400#"], 0.8);
     
     if (!imageData || !thumbnailImageData) {
         return NO;
@@ -249,11 +249,11 @@
         [[UIApplication sharedApplication] endBackgroundTask:self.photoPostBackgroundTaskId];
     }];
     
-    [self.parentViewController dismissViewControllerAnimated:YES completion:nil];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)cancelButtonAction:(id)sender {
-    [self.parentViewController dismissViewControllerAnimated:YES completion:nil];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 @end

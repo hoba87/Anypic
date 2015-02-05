@@ -197,11 +197,6 @@
                                     cell.commentLabelHelper.alpha = 0.6f;
                                 }];
                             }
-
-//
-#warning todo
-                            //      [headerView setLikeStatus:[[PAPCache sharedCache] isPhotoLikedByCurrentUser:object]];
-                            
                         }
                     }];
                 }
