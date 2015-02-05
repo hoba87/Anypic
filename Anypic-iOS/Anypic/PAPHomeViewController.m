@@ -29,7 +29,7 @@
 @synthesize firstLaunch;
 //@synthesize settingsActionSheetDelegate;
 @synthesize blankTimelineView;
-
+@synthesize activityButton;
 
 #pragma mark - UIViewController
 
@@ -58,19 +58,21 @@
     self.toolBarItemsLeft = @[profileButton,friendsButton];
     
     //        Activity
-    UIBarButtonItem *activityButton = [[UIBarButtonItem alloc]
-                                       initWithImage:[UIImage imageNamed:@"activity"]
-                                       style:UIBarButtonItemStyleDone
-                                       target:self action:@selector(activity)];
-    [activityButton setBackgroundImage:[UIImage new] forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
+    UIButton *customButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 40, 40)];
+    // Add your action to your button
+    [customButton addTarget:self action:@selector(activity) forControlEvents:UIControlEventTouchUpInside];
+    // Customize your button as you want, with an image if you have a pictogram to display for example
+    [customButton setImage:[UIImage imageNamed:@"activity"] forState:UIControlStateNormal];
     
-    
+    // Then create and add our custom BBBadgeBarButtonItem
+    activityButton = [[BBBadgeBarButtonItem alloc] initWithCustomUIButton:customButton];
+    activityButton.badgeOriginX = 25;
+    activityButton.badgeOriginY = -6;
     
     UIBarButtonItem *shuffleButton = [[UIBarButtonItem alloc]
                                       initWithImage:[UIImage imageNamed:@"newestpics"]
                                       style:UIBarButtonItemStyleDone
                                       target:self action:@selector(shuffle)];
-    [activityButton setBackgroundImage:[UIImage new] forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
     self.toolBarItemsRight = @[shuffleButton, activityButton];
     
     //        self.navigationItem.rightBarButtonItem = shuffleButton;
@@ -85,7 +87,9 @@
     [self.blankTimelineView addSubview:button];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(timeline) name:@"kBlankTimeLineView" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pushreceived) name:@"kPushNotification" object:nil];
 
+    
 }
 
 static PAPHomeViewController *__sharedInstance = nil;
@@ -106,6 +110,12 @@ static PAPHomeViewController *__sharedInstance = nil;
     [self.navigationController pushViewController:accountViewController animated:YES];
 }
 -(void)activity{
+    //    // Clears out all notifications from Notification Center.
+    [[UIApplication sharedApplication] cancelAllLocalNotifications];
+    [UIApplication sharedApplication].applicationIconBadgeNumber = 1;
+    [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
+    [[PFInstallation currentInstallation] saveInBackground];
+    activityButton.badgeValue = @"0";
     PAPActivityFeedViewController *activityViewController = [[PAPActivityFeedViewController alloc] initWithStyle:UITableViewStylePlain];//WithStyle:UITableViewStylePlain];
     [self.navigationController pushViewController:activityViewController animated:YES];
 }
@@ -116,10 +126,15 @@ static PAPHomeViewController *__sharedInstance = nil;
 
 -(void)shuffle{
     [self reloadMPODataSourceDataAndViewWithOptions:[NSDictionary dictionaryWithObjectsAndKeys:@"newest",@"caller",nil]];
-
-
+}
+-(void)pushreceived{
+    activityButton.badgeValue = [NSString stringWithFormat:@"%d", [activityButton.badgeValue intValue] + 1];
 }
 #pragma mark - ()
+-(void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
+    activityButton.badgeValue = [NSString stringWithFormat:@"%li",(long)[UIApplication sharedApplication].applicationIconBadgeNumber];
+}
 
     -(void)viewWillAppear:(BOOL)animated{
         [super viewWillAppear:animated];
@@ -169,7 +184,7 @@ static PAPHomeViewController *__sharedInstance = nil;
             //    }
         }
     }
-    -(void)timeline{
+-(void)timeline{
         if (mpoDataSource.count == 0) {
             [self.view addSubview:self.blankTimelineView];
             self.blankTimelineView.alpha = 0.0f;
@@ -180,12 +195,12 @@ static PAPHomeViewController *__sharedInstance = nil;
             [self.blankTimelineView removeFromSuperview];
         }
     }
-    - (void)pushCaptureViewController
+- (void)pushCaptureViewController
     {
         [self.navigationController pushViewController:[DCaptureViewController sharedInstance] animated:YES];
     }
-    
-    - (void)pushSettingsViewController
+
+- (void)pushSettingsViewController
     {
         [self.navigationController pushViewController:[DSettingsViewController sharedInstance] animated:YES];
     }

@@ -10,6 +10,7 @@
 #import "VPImageCropperViewController.h"
 #import "DParseLoginViewController.h"
 #import "DParseSignUpViewController.h"
+#import "BBBadgeBarButtonItem.h"
 
 @interface PAPHomeViewController : PAPPhotoTimelineViewController <PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate, VPImageCropperDelegate>
 {
@@ -19,5 +20,5 @@
 @property (nonatomic, assign, getter = isFirstLaunch) BOOL firstLaunch;
 @property (strong, nonatomic) DParseLoginViewController *logInViewController;
 @property (strong, nonatomic) DParseSignUpViewController *signUpViewController;
-
+@property (strong, nonatomic) BBBadgeBarButtonItem *activityButton;
 @end
