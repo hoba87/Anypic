@@ -79,14 +79,12 @@
     self.blankTimelineView.alpha = 0.0f;
     
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-    button.frame = CGRectMake( 33.0f, 96.0f, 253.0f, 173.0f);
+    button.frame = self.view.bounds;
     [button setBackgroundImage:[UIImage imageNamed:@"HomeTimelineBlank.png"] forState:UIControlStateNormal];
     [button addTarget:self action:@selector(inviteFriendsButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.blankTimelineView addSubview:button];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(timeline) name:@"kBlankTimeLineView" object:nil];
-    
-    
 
 }
 

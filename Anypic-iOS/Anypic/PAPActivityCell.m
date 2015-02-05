@@ -131,8 +131,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
     if ([PAPUtility userHasProfilePictures:self.user]) {
         [self.avatarImageView setFile:[self.user objectForKey:kPAPUserProfilePicSmallKey]];
     } else {
-#warning todo
-//        [self.avatarImageView setImage:[PAPUtility defaultProfilePicture]];
+        [self.avatarImageView setImage:[PAPUtility defaultProfilePicture]];
     }
     
     NSString *nameString = NSLocalizedString(@"Someone", @"Text when the user's name is unknown");

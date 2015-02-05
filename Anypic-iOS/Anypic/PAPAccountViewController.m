@@ -89,18 +89,18 @@ static NSString *LoadMoreCellIdentifier = @"LoadMoreCell";
     [texturedBackgroundView setBackgroundColor:[UIColor clearColor]];
     galleryCollectionView.backgroundView = texturedBackgroundView;
 
-    UIView *profilePictureBackgroundView = [[UIView alloc] initWithFrame:CGRectMake( 94.0f, 38.0f, 132.0f, 132.0f)];
-    [profilePictureBackgroundView setBackgroundColor:[UIColor darkGrayColor]];
-    profilePictureBackgroundView.alpha = 0.0f;
-    CALayer *layer = [profilePictureBackgroundView layer];
-    layer.cornerRadius = 66.0f;
-    layer.masksToBounds = YES;
-    [self.headerView addSubview:profilePictureBackgroundView];
+//    UIView *profilePictureBackgroundView = [[UIView alloc] initWithFrame:CGRectMake( 94.0f, 38.0f, 132.0f, 132.0f)];
+//    [profilePictureBackgroundView setBackgroundColor:[UIColor darkGrayColor]];
+//    profilePictureBackgroundView.alpha = 0.0f;
+//    CALayer *layer = [profilePictureBackgroundView layer];
+//    layer.cornerRadius = 66.0f;
+//    layer.masksToBounds = YES;
+//    [self.headerView addSubview:profilePictureBackgroundView];
     
     PFImageView *profilePictureImageView = [[PFImageView alloc] initWithFrame:CGRectMake( 94.0f, 38.0f, 132.0f, 132.0f)];
     [self.headerView addSubview:profilePictureImageView];
     [profilePictureImageView setContentMode:UIViewContentModeScaleAspectFill];
-    layer = [profilePictureImageView layer];
+    CALayer *layer = [profilePictureImageView layer];
     layer.cornerRadius = 15.0f;
     layer.masksToBounds = YES;
     profilePictureImageView.alpha = 0.0f;
@@ -111,7 +111,7 @@ static NSString *LoadMoreCellIdentifier = @"LoadMoreCell";
         [profilePictureImageView loadInBackground:^(UIImage *image, NSError *error) {
             if (!error) {
                 [UIView animateWithDuration:0.200f animations:^{
-                    profilePictureBackgroundView.alpha = 1.0f;
+//                    profilePictureBackgroundView.alpha = 1.0f;
                     profilePictureImageView.alpha = 1.0f;
                 }];
                 
@@ -126,12 +126,12 @@ static NSString *LoadMoreCellIdentifier = @"LoadMoreCell";
             }
         }];
     } else {
-        [profilePictureImageView setImage:[[PAPUtility defaultProfilePicture] applyDarkEffect]];
+        [profilePictureImageView setImage:[UIImage imageWithData:UIImageJPEGRepresentation([PAPUtility defaultProfilePicture], 1.0f)]];
         [UIView animateWithDuration:0.200f animations:^{
-            profilePictureBackgroundView.alpha = 1.0f;
+//            profilePictureBackgroundView.alpha = 1.0f;
             profilePictureImageView.alpha = 1.0f;
         }];
-        UIImageView *backgroundImageView = [[UIImageView alloc] initWithImage:[[PAPUtility defaultProfilePicture] applyDarkEffect]];
+        UIImageView *backgroundImageView = [[UIImageView alloc] initWithImage:[[UIImage imageWithData:UIImageJPEGRepresentation([PAPUtility defaultProfilePicture], 1.0f)] applyDarkEffect]];
         backgroundImageView.frame = galleryCollectionView.backgroundView.bounds;
         backgroundImageView.alpha = 0.0f;
         [galleryCollectionView.backgroundView addSubview:backgroundImageView];
@@ -357,11 +357,10 @@ static NSString *LoadMoreCellIdentifier = @"LoadMoreCell";
 }
 
 - (void)editPortrait {
-#warning delete hinzufügen
     UIActionSheet *choiceSheet = [[UIActionSheet alloc] initWithTitle:nil
                                                              delegate:self
                                                     cancelButtonTitle:@"Cancel"
-                                               destructiveButtonTitle:nil
+                                               destructiveButtonTitle:@"Delete"
                                                     otherButtonTitles:@"Capture", @"Library", nil];
     [choiceSheet showInView:self.view];
 }
@@ -369,7 +368,7 @@ static NSString *LoadMoreCellIdentifier = @"LoadMoreCell";
 
 #pragma mark UIActionSheetDelegate
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
-    if (buttonIndex == 0) {
+    if (buttonIndex == 1) {
         // 拍照
         if ([self isCameraAvailable] && [self doesCameraSupportTakingPhotos]) {
             UIImagePickerController *controller = [[UIImagePickerController alloc] init];
@@ -388,7 +387,7 @@ static NSString *LoadMoreCellIdentifier = @"LoadMoreCell";
                              }];
         }
         
-    } else if (buttonIndex == 1) {
+    } else if (buttonIndex == 2) {
         // 从相册中选取
         if ([self isPhotoLibraryAvailable]) {
             UIImagePickerController *controller = [[UIImagePickerController alloc] init];
@@ -403,7 +402,12 @@ static NSString *LoadMoreCellIdentifier = @"LoadMoreCell";
                                  NSLog(@"Picker View Controller is presented");
                              }];
         }
-    } else if (buttonIndex == 2) {
+    } else if (buttonIndex == 0) {
+        user[kPAPUserProfilePicSmallKey] = [PFFile fileWithData:UIImageJPEGRepresentation([PAPUtility defaultProfilePicture], 1.0f)];
+        [user saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                    NSLog(@"Profilbild gelöscht");
+        }];
+    } else if (buttonIndex == 3) {
         [self dismissViewControllerAnimated:YES completion:^{
             
         }];

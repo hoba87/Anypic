@@ -14,7 +14,7 @@
 #import "PAPLoadMoreCell.h"
 #import "PAPFindFriendsViewController.h"
 #import "MBProgressHUD.h"
-#import "AppDelegate.h"
+#import "DAppDelegate.h"
 
 @interface PAPActivityFeedViewController ()
 
@@ -74,7 +74,7 @@
     
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
     [button setBackgroundImage:[UIImage imageNamed:@"ActivityFeedBlank.png"] forState:UIControlStateNormal];
-    [button setFrame:CGRectMake(24.0f, 113.0f, 271.0f, 140.0f)];
+    [button setFrame:self.view.bounds];
     [button addTarget:self action:@selector(inviteFriendsButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.blankTimelineView addSubview:button];
 
