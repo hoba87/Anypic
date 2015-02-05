@@ -86,7 +86,7 @@ static NSString *LoadMoreCellIdentifier = @"LoadMoreCell";
     [self.headerView setBackgroundColor:[UIColor clearColor]]; // should be clear, this will be the container for our avatar, photo count, follower count, following count, and so on
     
     UIView *texturedBackgroundView = [[UIView alloc] initWithFrame:self.view.bounds];
-    [texturedBackgroundView setBackgroundColor:[UIColor blackColor]];
+    [texturedBackgroundView setBackgroundColor:[UIColor clearColor]];
     galleryCollectionView.backgroundView = texturedBackgroundView;
 
     UIView *profilePictureBackgroundView = [[UIView alloc] initWithFrame:CGRectMake( 94.0f, 38.0f, 132.0f, 132.0f)];
@@ -158,11 +158,11 @@ static NSString *LoadMoreCellIdentifier = @"LoadMoreCell";
     [photoCountLabel setShadowOffset:CGSizeMake( 0.0f, -1.0f)];
     [photoCountLabel setFont:[UIFont boldSystemFontOfSize:14.0f]];
     [self.headerView addSubview:photoCountLabel];
-    
-    UIImageView *followersIconImageView = [[UIImageView alloc] initWithImage:nil];
-    [followersIconImageView setImage:[UIImage imageNamed:@"iconFollowers.png"]];
-    [followersIconImageView setFrame:CGRectMake( 247.0f, 50.0f, 52.0f, 37.0f)];
-    [self.headerView addSubview:followersIconImageView];
+#warning todo
+//    UIImageView *followersIconImageView = [[UIImageView alloc] initWithImage:nil];
+//    [followersIconImageView setImage:[UIImage imageNamed:@"iconFollowers.png"]];
+//    [followersIconImageView setFrame:CGRectMake( 247.0f, 40.0f, 52.0f, 51.0f)];
+//    [self.headerView addSubview:followersIconImageView];
     
     UILabel *followerCountLabel = [[UILabel alloc] initWithFrame:CGRectMake( 226.0f, 94.0f, self.headerView.bounds.size.width - 226.0f, 16.0f)];
     [followerCountLabel setTextAlignment:NSTextAlignmentCenter];
