@@ -112,10 +112,13 @@ static PAPHomeViewController *__sharedInstance = nil;
 -(void)activity{
     //    // Clears out all notifications from Notification Center.
     [[UIApplication sharedApplication] cancelAllLocalNotifications];
-    [UIApplication sharedApplication].applicationIconBadgeNumber = 1;
-    [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
-    [[PFInstallation currentInstallation] saveInBackground];
-    activityButton.badgeValue = @"0";
+    PFInstallation *currentInstallation = [PFInstallation currentInstallation];
+    if (currentInstallation.badge != 0) {
+        activityButton.badgeValue = @"0";
+        currentInstallation.badge = 0;
+        [currentInstallation saveEventually];
+    }
+    
     PAPActivityFeedViewController *activityViewController = [[PAPActivityFeedViewController alloc] initWithStyle:UITableViewStylePlain];//WithStyle:UITableViewStylePlain];
     [self.navigationController pushViewController:activityViewController animated:YES];
 }
@@ -133,7 +136,8 @@ static PAPHomeViewController *__sharedInstance = nil;
 #pragma mark - ()
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
-    activityButton.badgeValue = [NSString stringWithFormat:@"%li",(long)[UIApplication sharedApplication].applicationIconBadgeNumber];
+    PFInstallation *currentInstallation = [PFInstallation currentInstallation];
+    activityButton.badgeValue = [NSString stringWithFormat:@"%li",currentInstallation.badge];
 }
 
     -(void)viewWillAppear:(BOOL)animated{
